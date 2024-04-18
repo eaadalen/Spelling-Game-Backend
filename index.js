@@ -29,7 +29,7 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-mongoose.connect("mongodb+srv://erikaadalen:lStIKkb8PkTPoS7a@nv5-project-info.hx7f5vb.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Greeting message
 app.get('/', (req, res) => {
