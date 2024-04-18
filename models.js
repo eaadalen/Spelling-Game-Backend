@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 let userSchema = mongoose.Schema({
   Username: {type: String, required: true},
   Password: {type: String, required: true},
+  High_Score: {type: Number, required: true},
 });
 
 userSchema.statics.hashPassword = (password) => {

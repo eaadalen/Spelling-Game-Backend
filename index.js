@@ -66,6 +66,7 @@ app.post('/users',
             .create({
               Username: req.body.Username,
               Password: hashedPassword,
+              High_Score: 0
             })
             .then((user) => { res.status(201).json(user) })
             .catch((error) => {
