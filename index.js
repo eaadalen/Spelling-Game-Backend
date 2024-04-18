@@ -1,11 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const uuid = require('uuid');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 const { check, validationResult } = require('express-validator');
-const Projects = Models.Project;
 const Users = Models.User;
 const app = express();
 const cors = require('cors');
@@ -25,7 +23,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'));
 app.use(morgan('common'));
-let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
@@ -34,18 +31,6 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
 // Greeting message
 app.get('/', (req, res) => {
   res.send("Hello");
-});
-
-// Gets the full list of projects
-app.get('/projects', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Projects.find()
-      .then((projects) => {
-        res.status(201).json(projects);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send('Error: ' + err);
-      });
 });
 
 // Get full list of users
@@ -83,52 +68,6 @@ app.post('/users',
               Password: hashedPassword,
             })
             .then((user) => { res.status(201).json(user) })
-            .catch((error) => {
-              console.error(error);
-              res.status(500).send('Error: ' + error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).send('Error: ' + error);
-      });
-  });
-
-// Add a project to the database
-app.post('/input-project',
-  [
-    check('Title', 'Title is required').not().isEmpty(),
-    check('ProjectNumber', 'Project Number is required').not().isEmpty(),
-    check('Description', 'Description is required').not().isEmpty(),
-    check('Keywords', 'Keywords are required').not().isEmpty(),
-    check('FileLocation', 'File Location is required').not().isEmpty(),
-    check('ProjectManager', 'Project Manager is required').not().isEmpty(),
-    check('ProjectStaff', 'Project Staff is required').not().isEmpty(),
-    check('Systems_and_Equipment', 'Systems and Equipment are required').not().isEmpty()
-  ], async (req, res) => {
-    let errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
-    await Projects.findOne({ ProjectNumber: req.body.ProjectNumber }) // Search to see if a project with the requested project number already exists
-      .then((project) => {
-        if (project) {
-          //If the project number is found, send a response that it already exists
-          return res.status(400).send(req.body.ProjectNumber + ' already exists');
-        } else {
-          Projects
-            .create({
-              Title: req.body.Title,
-              ProjectNumber: req.body.ProjectNumber,
-              Description: req.body.Description,
-              Keywords: req.body.Keywords,
-              FileLocation: req.body.FileLocation,
-              ProjectManager: req.body.ProjectManager,
-              ProjectStaff: req.body.ProjectStaff,
-              Systems_and_Equipment: req.body.Systems_and_Equipment,
-            })
-            .then((project) => { res.status(201).json(project) })
             .catch((error) => {
               console.error(error);
               res.status(500).send('Error: ' + error);
