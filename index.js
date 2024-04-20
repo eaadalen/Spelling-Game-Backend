@@ -84,16 +84,14 @@ app.post('/users',
   });
 
 // Update high score
-app.put('/users/update', [check('highScore', 'High Score must be a number').isNumeric()], 
-  passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.put('/users/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
   let errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-  await Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
-    {
-      highScore: req.body.highScore
-    }
+  console.log(req.body.highScore);
+  await Users.findOneAndUpdate({ Username: req.params.Username }, { 
+    $set: { highScore: req.body.highScore} 
   },
   { new: true }) // This line makes sure that the updated document is returned
   .then((updatedUser) => {
