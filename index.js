@@ -84,7 +84,8 @@ app.post('/users',
   });
 
 // Update high score
-app.put('/users/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.put('/users/update', [check('highScore', 'High Score must be a number').isNumeric()], 
+  passport.authenticate('jwt', { session: false }), async (req, res) => {
   let errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
