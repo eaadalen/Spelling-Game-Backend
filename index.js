@@ -84,12 +84,12 @@ app.post('/users',
   });
 
 // Update high score
-app.put('/users/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   let errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-  console.log(req.body.highScore);
+  res.json(req.body);
   await Users.findOneAndUpdate({ Username: req.params.Username }, { 
     $set: { highScore: req.body.highScore} 
   },
