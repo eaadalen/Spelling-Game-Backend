@@ -81,6 +81,27 @@ app.post('/users',
       });
   });
 
+// Update high score
+app.put('/users/update', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  await Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
+    {
+      highScore: req.body.highScore
+    }
+  },
+  { new: true }) // This line makes sure that the updated document is returned
+  .then((updatedUser) => {
+    res.json(updatedUser);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  })
+});
+
 // error handling
 app.use((err, req, res, next) => {
     console.error(err.stack);
