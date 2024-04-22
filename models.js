@@ -7,6 +7,10 @@ let userSchema = mongoose.Schema({
   highScore: {type: Number, required: true}
 });
 
+let wordSchema = mongoose.Schema({
+  Spelling: {type: String, required: true},
+});
+
 userSchema.statics.hashPassword = (password) => {
   return bcrypt.hashSync(password, 10);
 };
@@ -16,5 +20,7 @@ userSchema.methods.validatePassword = function(password) {
 };
 
 let User = mongoose.model('User', userSchema);
+let Word = mongoose.model('Word', wordSchema);
 
 module.exports.User = User;
+module.exports.Word = Word;

@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const Models = require('./models.js');
 const { check, validationResult } = require('express-validator');
 const Users = Models.User;
+const Words = Models.Word;
 const app = express();
 const cors = require('cors');
 let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'http://localhost:4200', 'https://nv5-database.netlify.app', 'https://eaadalen.github.io'];
@@ -101,6 +102,18 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), as
     console.error(err);
     res.status(500).send("Error: " + err);
   })
+});
+
+// Get full list of words
+app.get('/words', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Words.find()
+      .then((words) => {
+        res.status(201).json(words);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
 });
 
 // error handling
