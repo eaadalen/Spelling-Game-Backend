@@ -116,6 +116,35 @@ app.get('/words', passport.authenticate('jwt', { session: false }), (req, res) =
       });
 });
 
+// Add a new word
+app.post('/words', async (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    await Words.findOne({ Spelling: req.body.Spelling }) // Search to see if the word already exists in the database
+      .then((word) => {
+        if (word) {
+          //If the word is found, send a response that it already exists
+          return res.status(400).send(req.body.Spelling + ' already exists');
+        } else {
+          Users
+            .create({
+              Spelling: req.body.Spelling
+            })
+            .then((word) => { res.status(201).json(word) })
+            .catch((error) => {
+              console.error(error);
+              res.status(500).send('Error: ' + error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      });
+  });
+
 // error handling
 app.use((err, req, res, next) => {
     console.error(err.stack);
