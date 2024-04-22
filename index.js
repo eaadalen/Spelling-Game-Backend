@@ -128,7 +128,7 @@ app.post('/words', async (req, res) => {
           //If the word is found, send a response that it already exists
           return res.status(400).send(req.body.Spelling + ' already exists');
         } else {
-          Users
+          Words
             .create({
               Spelling: req.body.Spelling
             })
