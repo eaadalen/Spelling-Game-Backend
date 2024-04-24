@@ -9,7 +9,7 @@ const Users = Models.User;
 const Words = Models.Word;
 const app = express();
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'http://localhost:4200', 'https://nv5-database.netlify.app', 'https://eaadalen.github.io'];
+let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://media.merriam-webster.com/audio/prons/en/us/mp3/v/volumi02.mp3', 'https://nv5-database.netlify.app', 'https://eaadalen.github.io'];
 const port = process.env.PORT || 8080;
 app.use(cors({
   origin: (origin, callback) => {
