@@ -116,6 +116,18 @@ app.get('/words', passport.authenticate('jwt', { session: false }), (req, res) =
       });
 });
 
+// Get a random word
+app.get('/random', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Words.aggregate([{ $sample: { size: 1 } }])
+      .then((random) => {
+        res.status(201).json(random);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+});
+
 // Add a new word
 app.post('/words', async (req, res) => {
     let errors = validationResult(req);
