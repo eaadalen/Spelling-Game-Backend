@@ -105,7 +105,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), as
 });
 
 // Get full list of words
-app.get('/words', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/words', (req, res) => {
   Words.find()
       .then((words) => {
         res.status(201).json(words);
@@ -117,7 +117,7 @@ app.get('/words', passport.authenticate('jwt', { session: false }), (req, res) =
 });
 
 // Get a random word
-app.get('/random', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/random', (req, res) => {
   Words.aggregate([{ $sample: { size: 1 } }])
       .then((random) => {
         res.status(201).json(random);
