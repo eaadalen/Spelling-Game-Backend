@@ -48,6 +48,18 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
       });
 });
 
+// Get user info by username
+app.get('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Users.findOne({ "Username": req.params.username})
+      .then((response) => {
+        res.status(201).json(response.Username);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+});
+
 // Create a new user
 app.post('/users',
   [
