@@ -9,7 +9,7 @@ const Users = Models.User;
 const Words = Models.Word;
 const app = express();
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:8080', 'http://localhost:1234', 'https://media.merriam-webster.com', 'https://eaadalen.github.io', "https://erikaadalen.com"];
+let allowedOrigins = ['https://spelling-game-frontend-1a185536ff36.herokuapp.com/', 'http://localhost:1234', 'https://media.merriam-webster.com', 'https://eaadalen.github.io', "https://erikaadalen.com"];
 const port = process.env.PORT || 8080;
 app.use(cors({
   origin: (origin, callback) => {
