@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
 
 // Get full list of users
 app.get('/users', (req, res) => {
-  Users.find()
+  Users.find().sort( { "highScore": -1 } )
       .then((users) => {
         res.status(201).json(users);
       })
